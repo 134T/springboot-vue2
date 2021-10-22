@@ -1,0 +1,146 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html >
+	<head>
+		<title>emplist</title>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+		<link rel="stylesheet" type="text/css" href="css/style.css" />
+	</head>
+	<body>
+		<div id="wrap">
+			<div id="top_content"> 
+				<div id="header">
+					<div id="rightheader">
+						<p>
+							2021/11/20
+							<br />
+							<input type="button" value="安全退出" @click="securityOut">
+							
+						</p>
+					</div>
+					<div id="topheader">
+						<h1 id="title">
+							<a href="#">main</a>
+						</h1>
+					</div>
+					<div id="navigation" >
+					
+					</div>
+					
+				</div>
+				<div id="content">
+					<p id="whereami">
+					</p>
+					<h1>
+						Welcome!
+					</h1>
+					<table class="table">
+						<tr class="table_header">
+							<td>
+								ID
+							</td>
+							<td>
+								Name
+							</td>
+							<td>
+								Photo
+							</td>
+							<td>
+								Salary
+							</td>
+							<td>
+								Age
+							</td>
+							<td>
+								Operation
+							</td>
+						</tr>
+						<tr  v-for="(emp,index) in emps">
+							<td>
+								{{emp.id}}
+							</td>
+							<td>
+								{{emp.name}}
+							</td>
+							<td>
+								<img :src="'./img/'+emps[index].path" style="height: 60px;" id="localPath">
+							</td>
+							<td>
+								{{emp.salary}}
+							</td>
+							<td>
+								20
+							</td>
+							<td>
+								<a  @click="deleteEmp(emp.id)">delete emp</a>&nbsp;<a  @click="editEmp(emp.id)">update emp</a>
+							</td>
+						</tr>
+					</table>
+					<p>
+						<input type="button" class="button" value="Add Employee" @click="addEmp"/>
+					</p>
+				</div>
+			</div>
+			<div id="footer">
+				<div id="footer_bg">
+				ABC@126.com
+				</div>
+			</div>
+		</div>
+	</body>
+</html>
+
+<script src="js/vue.js"></script>
+<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+<script>
+	const app = new Vue({
+		el: "#wrap",
+		data(){
+			return {
+				emps:[],
+				delHref: ""
+			}
+		},
+		methods:{
+			securityOut(){
+				if (confirm("确定安全退出吗？")){
+					axios.get("http://localhost:8080/user/logout").then(res =>{
+						
+						location.href="http://localhost:8080/login.html"
+					})
+				}
+			},
+			//删除
+			deleteEmp(id){
+				if (confirm("确定删除用户吗？")){
+					axios.delete("http://localhost:8080/emp/delEmp?id="+id).then(res =>{
+						if(res.data.status){
+							this.start()
+						}
+						alert(res.data.msg)
+						
+					})
+				}
+			},
+		//	编辑
+			editEmp(id){
+				location.href="http://localhost:8080/update.html?id="+id
+			},
+		//	添加
+			addEmp(){
+				location.href="http://localhost:8080/addEmp.html"
+			},
+			
+		//	初始化用户数据
+			start(){
+				axios.get("/emp/getAll").then(res =>{
+					this.emps=res.data
+				})
+			}
+			
+		},
+		created() {
+			this.start()
+		}
+	})
+	
+</script>

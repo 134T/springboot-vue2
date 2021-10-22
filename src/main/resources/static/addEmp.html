@@ -1,0 +1,121 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+	  xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+	<head>
+		<title>add Emp</title>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+		<link rel="stylesheet" type="text/css"
+			href="css/style.css" />
+	</head>
+
+	<body>
+		<div id="wrap">
+			<div id="top_content">
+					<div id="header">
+						<div id="rightheader">
+							<p>
+								2021/11/20
+								<br />
+							</p>
+						</div>
+						<div id="topheader">
+							<h1 id="title">
+								<a href="#">Main</a>
+							</h1>
+						</div>
+						<div id="navigation">
+						</div>
+					</div>
+				<div id="content">
+					<p id="whereami">
+					</p>
+					<h1>
+						add Emp info:
+					</h1>
+					<form action="emplist.html" method="post">
+						<table cellpadding="0" cellspacing="0" border="0"
+							class="form_table">
+							<tr>
+								<td valign="middle" align="right">
+									name:
+								</td>
+								<td valign="middle" align="left">
+									<input type="text" class="inputgri" v-model="emp.name" />
+								</td>
+							</tr>
+							<tr>
+								<td valign="middle" align="right">
+									photo:
+								</td>
+								<td valign="middle" align="left">
+									<input type="file"  ref="myPhoto"/>
+								</td>
+							</tr>
+							<tr>
+								<td valign="middle" align="right">
+									salary:
+								</td>
+								<td valign="middle" align="left">
+									<input type="text" class="inputgri" v-model="emp.salary" />
+								</td>
+							</tr>
+
+						</table>
+						<p>
+							<input type="button" class="button" value="Confirm" @click="saveEmp" />
+						</p>
+					</form>
+				</div>
+			</div>
+			<div id="footer">
+				<div id="footer_bg">
+					ABC@126.com
+				</div>
+			</div>
+		</div>
+	</body>
+</html>
+
+<script src="js/vue.js"></script>
+<!--<script src="/js/axios.min.js"></script>-->
+<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+<script>
+	const app = new Vue({
+		el: "#wrap",
+		data() {
+			return {
+				emp: {salary:""}
+			}
+		},
+		methods:{
+			saveEmp(){
+				
+				const formData = new FormData();
+				formData.append("name",this.emp.name);
+				formData.append("salary",this.emp.salary);
+				formData.append("photo",this.$refs.myPhoto.files[0]);
+				axios({
+					method: "post",
+					url: "http://localhost:8080/emp/saveEmp",
+					data: formData,
+					headers: {
+						'content-type':'multipart/form-data'
+					}
+				}).then(res => {
+					
+					if (res.data.status) {
+						location.href="http://localhost:8080/emplist.html"
+					} else {
+						
+						alert(res.data.msg)
+					}
+				})
+				
+				
+			}
+		},
+		created(){
+			this.emp = {}
+		}
+	})
+</script>
