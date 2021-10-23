@@ -1,0 +1,28 @@
+# 应用名称
+spring:
+  application:
+    name: learning
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    name: druid
+    type: com.alibaba.druid.pool.DruidDataSource
+    url: jdbc:mysql://localhost:3306/travels?serverTimezone=UTC&characterEncoding=utf8
+    username: root
+    password: root
+# 清除缓存
+  thymeleaf:
+    cache: false
+
+#redis
+  redis:
+    host: 192.168.49.104
+    port: 7000
+    database: 0
+server:
+  port: 8083
+
+
+mybatis-plus:
+  type-aliases-package: com.springboot.learning.domain
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl

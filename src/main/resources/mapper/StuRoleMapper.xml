@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.springboot.learning.mapper.StuRoleMapper">
+
+    <select id="getStuRoles" resultMap="stuRolesMap">
+        select s.id sid,rs.id rsid,`role` from stu s left join stu_roles sr on s.id = sr.stu_id
+        left join roles rs on sr.role_id = rs.id where s.username=#{username}
+    </select>
+    
+    <resultMap id="stuRolesMap" type="stuRole">
+        <id column="sid" property="id"/>
+        <collection property="roles" javaType="list" ofType="roles" >
+            <id column="rsid" property="id"/>
+            <result column="role" property="role"/>
+        </collection>
+    </resultMap>
+
+</mapper>
